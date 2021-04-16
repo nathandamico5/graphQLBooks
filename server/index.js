@@ -16,6 +16,6 @@ app.use(
 const PORT = process.env.PORT || 4000;
 db.sync().then(() => {
   app.listen(PORT, () => {
-    console.log(`App listening at http://localhost:${PORT}`);
+    console.log(`GraphQL API listening at http://localhost:${PORT}/graphql`);
   });
 });

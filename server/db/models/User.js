@@ -40,12 +40,14 @@ User.authenticate = async function ({ username, password }) {
   console.log("authenticating");
   const user = await this.findOne({ where: { username } });
   // console.log(await user.correctPassword(password));
+
   if (!user || !(await user.correctPassword(password))) {
     console.log("In Here");
     const error = Error("Incorrect username/password");
     error.status = 401;
     throw error;
   }
+
   // console.log("Authenticated: ", user.id);
   // console.log(process.env.JWT);
   // console.log(user.generateToken());
