@@ -8,6 +8,7 @@ const {
   GraphQLNonNull,
 } = require("graphql");
 const { Book, Author, User } = require("../db");
+const io = require("../index");
 
 // Book Type
 const BookType = new GraphQLObjectType({
@@ -194,7 +195,25 @@ const Mutation = new GraphQLObjectType({
   },
 });
 
+const Subscription = new GraphQLObjectType({
+  name: "Subscription",
+  fields: {
+    users: {
+      type: new GraphQLList(UserType),
+      resolve() {
+        io.on("connection", (socket) => {
+          console.log(socket.id, " has made a persistent connection for users");
+          socket.on("new-user", (user) => {
+            socket.broadcast.emit("new-user", user);
+          });
+        });
+      },
+    },
+  },
+});
+
 module.exports = new GraphQLSchema({
   query: RootQuery,
   mutation: Mutation,
+  subscription: Subscription,
 });

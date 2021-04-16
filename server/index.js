@@ -14,8 +14,10 @@ app.use(
 );
 
 const PORT = process.env.PORT || 4000;
-module.exports = db.sync().then(() => {
+const server = db.sync().then(() => {
   app.listen(PORT, () => {
     console.log(`GraphQL API listening at http://localhost:${PORT}/graphql`);
   });
 });
+
+module.exports = require("socket.io")(server);
